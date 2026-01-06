@@ -13,10 +13,11 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimeLightHelpers;
 
 public class AutoAlignSubSytem extends SubsystemBase {
   /** Creates a new AutoAlignSubSytem. */
-  private final NetworkTable limelighTable;
+  private final LimeLightHelpers frontCamara;
   
   private final PIDController xController;
   private final PIDController yController;
@@ -30,7 +31,7 @@ public class AutoAlignSubSytem extends SubsystemBase {
 
   public AutoAlignSubSytem(CommandSwerveDrivetrain drivetrain){
     this.drivetrain = drivetrain;
-    this.limelighTable = NetworkTableInstance.getDefault().getTable("limelight1");
+    this.frontCamara = new LimeLightHelpers("limelight");
 
      this.xController = new PIDController(2, 0, 1);
      this.yController = new PIDController(2, 0, 1);
@@ -53,9 +54,9 @@ public class AutoAlignSubSytem extends SubsystemBase {
 
   public Command align_TO_M2Tag(Pose2d targetpose, int target){
     return run(() -> {
-      double tv = limelighTable.getEntry("tv").getDouble(0);
+      double tv = frontCamara.hasTarget();
 
-      if (tv == 1.0 && isMT2PoseReliable()) { // is MT2 pose is not defiened yet
+      if (tv == 1.0 && frontCamara.isMT2PoseReliable()) { // is MT2 pose is not defiened yet
           Pose2d currentPose = drivetrain.getState().Pose;
           
           double xVel = xController.calculate(currentPose.getX(), targetpose.getX());
@@ -80,11 +81,17 @@ public class AutoAlignSubSytem extends SubsystemBase {
   }).until(() -> isAlignedMegaTag(targetpose));
 }
 
+public boolean isMT2PoseReliable() {
+  int tagCount = frontCamara.getMT2TagCount();
+  double tagSpan = frontCamara.getMT2TagSpan(); // bigger span = more reliable
+  
+  return tagCount >= 2 && tagSpan > 0.4;
+}
 
   
 
   private boolean isAlignedMegaTag(Pose2d targetPose){
-    double tv = limelighTable.getEntry("tv").getDouble(0);
+    double tv = frontCamara.hasTarget();
 
       if (tv != 1.0) { // if target is not located
         return false;

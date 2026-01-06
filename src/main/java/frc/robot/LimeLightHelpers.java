@@ -42,10 +42,10 @@ public class LimeLightHelpers {
     
     /**
      * Check if Limelight has a valid target
-     * @return true if target is detected
+     * @return True if target is detected (Changed to return 1)
      */
-    public boolean hasTarget() {
-        return limelightTable.getEntry("tv").getDouble(0) == 1.0;
+    public double hasTarget() {
+        return limelightTable.getEntry("tv").getDouble(0);  // slightly modified to return a double
     }
     
     /**
