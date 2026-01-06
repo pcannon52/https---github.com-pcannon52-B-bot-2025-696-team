@@ -89,7 +89,7 @@ public class LimeLightHelpers {
     }
     
     // ===== MEGATAG2 POSE ESTIMATION =====
-    
+    // _orb means use megatag2
     /**
      * Get robot pose from MegaTag2 (blue alliance origin)
      * @return Array [x, y, z, roll, pitch, yaw] in meters and degrees
@@ -129,18 +129,19 @@ public class LimeLightHelpers {
     
     /**
      * Get full MegaTag2 data including quality metrics
-     * @return Array [x, y, z, roll, pitch, yaw, latency, tagCount, tagSpan, avgTagDist, avgTagArea]
+     * @return Array [x, y, z, roll, pitch, yaw, latency, tagCount, tagSpan, avgTagDist, avgTagArea] (Only for Blue)
+     * @return Don't use for position since it will not account for alliance diffrence
      */
-    public double[] getBotPoseMT2Blue() {
+    public double[] getBotMT2Data() {
         return limelightTable.getEntry("botpose_orb_wpiblue").getDoubleArray(new double[11]);
     }
-    
+
     /**
      * Get number of AprilTags used in MegaTag2 solution
      * @return Number of tags (0 if no solution)
      */
     public int getMT2TagCount() {
-        double[] pose = getBotPoseMT2Blue();
+        double[] pose = getBotMT2Data();
         return pose.length >= 8 ? (int) pose[7] : 0;
     }
     
@@ -150,7 +151,7 @@ public class LimeLightHelpers {
      * @return Tag span (0.0 to 1.0)
      */
     public double getMT2TagSpan() {
-        double[] pose = getBotPoseMT2Blue();
+        double[] pose = getBotMT2DataBlue();
         return pose.length >= 9 ? pose[8] : 0.0;
     }
     
@@ -159,7 +160,7 @@ public class LimeLightHelpers {
      * @return Average distance in meters
      */
     public double getMT2AvgTagDistance() {
-        double[] pose = getBotPoseMT2Blue();
+        double[] pose = getBotMT2DataBlue();
         return pose.length >= 10 ? pose[9] : 0.0;
     }
     

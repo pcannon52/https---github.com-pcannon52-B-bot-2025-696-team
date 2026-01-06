@@ -97,7 +97,7 @@ public boolean isMT2PoseReliable() {
         return false;
     }
 
-        double[] botpose = getBotPoseBlue(); // not defined yet
+        double[] botpose = frontCamara.getRobotPose2d(); //automatically accounts for alliance diffrence
         
         if (botpose.length >= 6) {
             Pose2d currentPose = new Pose2d(
