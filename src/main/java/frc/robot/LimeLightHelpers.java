@@ -151,7 +151,7 @@ public class LimeLightHelpers {
      * @return Tag span (0.0 to 1.0)
      */
     public double getMT2TagSpan() {
-        double[] pose = getBotMT2DataBlue();
+        double[] pose = getBotMT2Data();
         return pose.length >= 9 ? pose[8] : 0.0;
     }
     
@@ -160,7 +160,7 @@ public class LimeLightHelpers {
      * @return Average distance in meters
      */
     public double getMT2AvgTagDistance() {
-        double[] pose = getBotMT2DataBlue();
+        double[] pose = getBotMT2Data();
         return pose.length >= 10 ? pose[9] : 0.0;
     }
     
