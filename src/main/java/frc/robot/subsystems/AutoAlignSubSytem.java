@@ -97,14 +97,8 @@ public boolean isMT2PoseReliable() {
         return false;
     }
 
-        double[] botpose = frontCamara.getRobotPose2d(); //automatically accounts for alliance diffrence
-        
-        if (botpose.length >= 6) {
-            Pose2d currentPose = new Pose2d(
-                botpose[0],  // x component
-                botpose[1], //y component
-                Rotation2d.fromDegrees(botpose[5]) // yaw component
-            );
+        Pose2d currentPose = frontCamara.getRobotPose2d(); //automatically accounts for alliance diffrence
+     
             
             double xError = Math.abs(targetPose.getX() - currentPose.getX());
             double yError = Math.abs(targetPose.getY() - currentPose.getY());
@@ -113,13 +107,13 @@ public boolean isMT2PoseReliable() {
             return xError < POSITION_TOLERANCE && // this checks to see the if robot camara is within target 
                    yError < POSITION_TOLERANCE && 
                    rotError < ROTATION_TOLERANCE;
-        }
+        
         
         return false;
     }
 
 
 }
-
+  
 
 
